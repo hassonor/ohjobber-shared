@@ -32,15 +32,15 @@
     "registry": "https://registry.npmjs.org/"
   },
   "exports": {
-    ".": {
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js"
-    },
-    "./icons": {
-      "import": "./esm/icons/index.js",
-      "require": "./cjs/icons/index.js"
-    }
+  ".": {
+    "import": "./build/esm/index.js",
+    "require": "./build/cjs/index.js"
   },
+  "./icons": {
+    "import": "./build/esm/icons/index.js",
+    "require": "./build/cjs/icons/index.js"
+  }
+},
   "types": "./src/index.d.ts",
   "dependencies": {
     "@elastic/elasticsearch": "^8.15.0",
