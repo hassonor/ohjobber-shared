@@ -1,9 +1,16 @@
-import winston, {Logger} from 'winston';
-import {ElasticsearchTransformer, ElasticsearchTransport, LogData, TransformedData} from 'winston-elasticsearch';
+import winston, { Logger } from 'winston';
+import { ElasticsearchTransport, LogData, Transformer } from 'winston-elasticsearch';
 
-const esTransformer = (logData: LogData): TransformedData => {
-  return ElasticsearchTransformer(logData);
-}
+// Define your own transformer function
+const esTransformer: Transformer = (logData: LogData) => {
+  return {
+    '@timestamp': new Date().toISOString(),
+    message: logData.message,
+    level: logData.level,
+    // Include any other metadata you want to log
+    meta: logData.meta || {}
+  };
+};
 
 export const winstonLogger = (elasticsearchNode: string, name: string, level: string): Logger => {
   const options = {
@@ -16,6 +23,8 @@ export const winstonLogger = (elasticsearchNode: string, name: string, level: st
     elasticsearch: {
       level,
       transformer: esTransformer,
+      // Add apm if required by your version of winston-elasticsearch
+      apm: undefined,
       clientOpts: {
         node: elasticsearchNode,
         log: level,
@@ -25,11 +34,17 @@ export const winstonLogger = (elasticsearchNode: string, name: string, level: st
       }
     }
   };
-  const esTransport: ElasticsearchTransport = new ElasticsearchTransport(options.elasticsearch);
-  const logger: Logger = winston.createLogger({
+
+  const esTransport = new ElasticsearchTransport(options.elasticsearch);
+
+  const logger = winston.createLogger({
     exitOnError: false,
-    defaultMeta: {service: name},
-    transports: [new winston.transports.Console(options.console), esTransport]
+    defaultMeta: { service: name },
+    transports: [
+      new winston.transports.Console(options.console),
+      esTransport
+    ]
   });
+
   return logger;
-}
+};
