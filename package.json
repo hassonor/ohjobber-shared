@@ -1,6 +1,6 @@
 {
   "name": "@ohjobber/shared",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "index.js",
   "description": "Helpers library for Jobber app",
   "engines": {
@@ -32,15 +32,15 @@
     "registry": "https://registry.npmjs.org/"
   },
   "exports": {
-  ".": {
-    "import": "./build/esm/index.js",
-    "require": "./build/cjs/index.js"
+    ".": {
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
+    },
+    "./icons": {
+      "import": "./build/esm/icons/index.js",
+      "require": "./build/cjs/icons/index.js"
+    }
   },
-  "./icons": {
-    "import": "./build/esm/icons/index.js",
-    "require": "./build/cjs/icons/index.js"
-  }
-},
   "types": "./src/index.d.ts",
   "dependencies": {
     "@elastic/elasticsearch": "^8.15.0",
